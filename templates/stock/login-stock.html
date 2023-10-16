@@ -1,0 +1,145 @@
+{% extends 'base-login.html' %}
+{%- set site_title = '虛擬投資系統' -%}
+{%- set tabf1 = ('', 'Signin') -%}
+{%- set tabf2 = ('Signup',) -%}
+{%- set tabf3 = ('ResendPassword','ResendActivation') -%}
+
+
+{% block content %}
+
+<div class="container text-center">
+    <div class="row">
+        <div class="offset-md-1 col-md-10">
+            <img class="logo rounded" src="/static/img/logo.png" alt="">
+            <div class="content">
+                <h1><small class="texti-small pyone-center">虛擬投資系統</small></h1>
+                <h2><small class="texti-small">登入 <span class="command-post">{{ act_code }}</span></small></h2>
+                <form role="form" id="formMain" action="/stockLogin" method="post">
+                    <div class="offset-lg-3 col-lg-6 offset-md-2 col-md-8">
+                        <nav>
+                            <div class="nav nav-pills" id="nav-tab" role="tablist">
+
+
+                                <a id="signin-tab" href="#signin" role="tab" aria-controls="signin"
+                                    class="nav-link{% if act_code in tabf1 %} active{% endif %}" data-bs-toggle="tab"
+                                    data-bs-target="#signin" type="button" role="tab" aria-controls="signin"
+                                    aria-selected="true">登入</a>
+                                <a id="signup-tab" href="#signup" role="tab" aria-controls="signup"
+                                    class="nav-link{% if act_code in tabf2 %} active{% endif %}" data-bs-toggle="tab"
+                                    data-bs-target="#signup" type="button" role="tab" aria-controls="signup"
+                                    aria-selected="false">註冊</a>
+                                <a id="resend-tab" href="#resend" role="tab" aria-controls="resend"
+                                    class="nav-link{% if act_code in tabf3 %} active{% endif %}" data-bs-toggle="tab"
+                                    data-bs-target="#resend" type="button" role="tab" aria-controls="resend"
+                                    aria-selected="false">遇到問題?</a>
+
+                            </div>
+                        </nav>
+                        <div class="tab-content" id="nav-tabContent">
+                            <div id="signin" role="tabpanel" aria-labelledby="signin-tab"
+                                class="tab-pane fade {% if act_code in tabf1 %} show active{% endif %}">
+                                <div class="form-group">
+                                    <hr>
+                                    <input type="text" class="form-control form-control-lg" id="txtAccount"
+                                        name="txtAccount" placeholder="Email 帳號" autofocus value="{{ account }}">
+                                    <br>
+                                    <input type="password" class="form-control form-control-lg" id="txtPassword"
+                                        name="txtPassword" placeholder="密碼">
+                                </div>
+                                <br>
+                                <div class="form-group">
+                                    {%- if submit_result|length > 0 and act_code in tabf1 %}
+                                    <div class="alert alert-danger alert-dismissible">
+                                        <buttom type="buttom" class="close" data-dismiss="alart">&times;</buttom>
+                                        {{ submit_result }}
+                                    </div>
+                                    {%- endif %}
+
+                                    <button type="button" class="btn btn-lg btn-block btn-primary"
+                                        id="btnSignin">登入</button>
+                                </div>
+                            </div>
+                            <div id="signup" role="tabpanel" aria-labelledby="signup-tab"
+                                class="tab-pane fade {% if act_code in tabf2 %} show active{% endif %}">
+                                <hr>
+                                <input type="text" class="form-control form-control-lg" id="newAccount"
+                                    name="newAccount" placeholder="新建 Email 帳號" value="{{ new_account }}">
+                                <br>
+                                <input type="password" class="form-control form-control-lg" id="newPassword"
+                                    name="newPassword" placeholder="設定密碼">
+                                <br>
+                                <div class="form-group">
+                                    {%- if submit_result|length > 0 and act_code in tabf2 %}
+                                    <div class="alert alert-danger alert-dismissible">
+                                        <buttom type="buttom" class="close" data-dismiss="alart">&times;</buttom>
+                                        {{ submit_result }}
+                                    </div>
+                                    {%- endif %}
+
+                                    <button type="button" class="btn btn-lg btn-block btn-dark"
+                                        id="btnSignup">註冊</button>
+                                </div>
+                            </div>
+
+                            <div id="resend" role="tabpanel" aria-labelledby="sesend-tab"
+                                class="tab-pane fade {% if act_code in tabf3 %} show active{% endif %}">
+                                <hr>
+                                <input type="text" class="form-control form-control-lg" id="theAccount"
+                                    name="theAccount" placeholder="Email 帳號">
+                                <br>
+                                <div class="form-group">
+                                    {%- if submit_result|length > 0 and act_code in tabf3 %}
+                                    <div class="alert alert-danger alert-dismissible">
+                                        <buttom type="buttom" class="close" data-dismiss="alart">&times;</buttom>
+                                        {{ submit_result }}
+                                    </div>
+                                    {%- endif %}
+                                </div>
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-lg btn-block btn-danger"
+                                        id="btnResendPassword">重送密碼</button>
+
+                                    <button type="button" class="btn btn-lg btn-block btn-warning"
+                                        id="btnResendActivation">重送驗證</button>
+                                </div>
+                            </div>
+
+                        </div>
+                        <p><input type="hidden" id="act_code" name="act_code"></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block switch_link %}{% endblock %}
+
+{% block extra_js %}
+<!-- Bootstrap core JavaScript -->
+<script src="/static/bootstrap5/jquery.min.js"></script>
+<script src="/static/bootstrap5/bootstrap.bundle.min.js"></script>
+<!-- https://github.com/emn178/js-sha256 -->
+<script src="/static/js/sha256.min.js"></script>
+
+<script type="text/javascript">
+    console.log("{{ act_code }}");
+    $('[id^="btn"]').on('click', function (e) {
+        console.log(this.id.slice(3));
+        $('#act_code').val(this.id.slice(3));
+        $('#formMain').submit();
+    });
+    $("#signin-tab").on('click', function (e) {
+        $('#act_code').val('Signin');
+    });
+    $("#signup-tab").on('click', function (e) {
+        $('#act_code').val('Signup');
+    });
+    $("#resend-tab").on('click', function (e) {
+        $('#act_code').val('ResendPassword');
+    });
+
+</script>
+
+{% endblock %}

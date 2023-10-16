@@ -1,0 +1,20 @@
+{% extends 'stock/base-s.html' %}
+{%- set has_menu = 1 -%}
+{% set menu_stock = [
+('/stock-assets','資產總覽',('admin','user')),
+('/stock-entrust','委託下單',('admin','user')),
+('/stock-orders','交易紀錄',('admin','user')),
+('/stock-profitloss','損益明細',('admin','user')),
+('/stock-users','帳戶管理',('admin',)),
+('/stock-settings','系統設定',('admin',)),
+] %}
+
+{% block menu %}
+
+{%- for href,menu_item,roles in menu_stock %}
+
+{%- if session['role_name'] in roles %}
+<li class="nav-item"><a class="nav-link" href="{{ href|e }}">{{ menu_item }}</a></li>
+{%- endif %}
+{%- endfor %}
+{% endblock %}

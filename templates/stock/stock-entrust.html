@@ -1,0 +1,144 @@
+{%- extends 'stock/base-stock.html' %}
+{%- set is_user = 1 -%}
+{%- set html_title = '委託下單' -%}
+{%- set en_title = 'Entrust Orders' -%}
+{%- set zh_title = '委託下單' -%}
+
+{% block content %}
+<div id="sec00"></div>
+<section class="section-topic">
+    <h3 class="text-primary">{{ zh_title }}
+        <small id="select_stock_name" class="text-muted"
+            style="display: inline;">{{ en_title }}</small>
+    </h3>
+    <hr>
+</section>
+<div class="row gap-3 entrust-btn">
+    <div class="col-lg-3 ">
+        <select id="inputStockCode">
+        </select>
+    </div>
+    <div class="col-lg-3">
+        <button id='btn_get_stock_info' type="submit"
+            class="btn btn-primary btn-block" disabled>取得現價</button>
+    </div>
+    <div class="col-lg-2">
+        <button id="btn_sw" type="button"
+            class="btn btn-success btn-block" disabled>買進
+            (切換)</button>
+    </div>
+    <div class="col-lg-2">
+        <input type="text" class="form-control" id="inp_count" placeholder="張數"
+            value="1" onfocus="select();" disabled>
+    </div>
+    <div class="col-lg-1">
+        <button class="btn btn-dark" id='btn_buy' disabled>下單</button>
+    </div>
+</div>
+<br>
+<div class="row gap-3" style="margin: 0px;">
+    <div class="col-lg-3 alert alert-info fw-bold " id="mybalance" role="alert">
+        目前錢包餘額
+    </div>
+    <div class="col-lg-3 alert alert-warning fw-bold" id="calc_cost"
+        role="alert">
+        預計扣(加)款
+    </div>
+    <div class="col-lg-3 alert alert-danger fw-bold" id="calc_balance"
+        role="alert">
+        錢包估計餘額
+    </div>
+</div>
+<hr>
+
+
+<h3 class="text-primary">庫存圖表
+    <small class="text-muted">Inventory Chart</small>
+</h3>
+<div class="btn-group" role="group" aria-label="Basic example">
+    <button type="button" class="btn btn-secondary" id="btn_range_1d">1d</button>
+    <button type="button" class="btn btn-secondary" id="btn_range_5d">5d</button>
+    <button type="button" class="btn btn-secondary" id="btn_range_1m">1mo</button>
+    <button type="button" class="btn btn-secondary" id="btn_range_3m">3mo</button>
+    <button type="button" class="btn btn-secondary" id="btn_range_6m">6mo</button>
+    <button type="button" class="btn btn-secondary" id="btn_range_YTD">YTD</button>
+    <button type="button" class="btn btn-secondary" id="btn_range_1y">1y</button>
+    <button type="button" class="btn btn-secondary" id="btn_range_2y">2y</button>
+    <button type="button" class="btn btn-secondary" id="btn_range_5y">5y</button>
+    &nbsp
+
+
+    <div class="btn-group">
+        <button type="button" class="btn btn-secondary dropdown-toggle"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            Interval 1m
+        </button>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#" id="btn_1m">1m</a></li>
+            <li><a class="dropdown-item" href="#" id="btn_5m">2m</a></li>
+            <li><a class="dropdown-item" href="#" id="btn_15m">5m</a></li>
+            <li><a class="dropdown-item" href="#" id="btn_30m">15m</a></li>
+            <li><a class="dropdown-item" href="#" id="btn_30m">30m</a></li>
+            <li><a class="dropdown-item" href="#" id="btn_60m">60m</a></li>
+            <li><a class="dropdown-item" href="#" id="btn_1wk">1d</a></li>
+            <li><a class="dropdown-item" href="#" id="btn_1mo">1w</a></li>
+            <li><a class="dropdown-item" href="#" id="btn_3mo">1mo</a></li>
+            <li><a class="dropdown-item" href="#" id="btn_3mo">1y</a></li>
+        </ul>
+        
+    </div>
+     
+</div>
+
+<div id="k_line_chart" style="width:100%;height:600px"></div>
+<hr id="inv_hr">
+
+<h3 class="text-primary">庫存明細
+    <small class="text-muted">Inventory</small>
+</h3>
+<button class="btn btn-primary" id="btn_ref_inv">重新整理庫存</button>
+<table id="tableInv" class="table table-passbook table-sm table-hover
+        table-bordered" style="margin: 15px;">
+    <thead class="table-dark text-center">
+        <tr>
+            <th>股票代碼<br>Symbol</th>
+            <th>簡稱<br>Name</th>
+            <th>庫存<br>Inventory</th>
+            <th>買進均價<br>Mean Cost</th>
+            <th>現價<br>Current Price</th>
+            <th>預估損益<br>Estimated P&L</th>
+            <th>預估報酬率<br>Estimated ROI</th>
+        </tr>
+    </thead>
+    <tbody class="text-center" id="inv_table">
+
+    </tbody>
+</table>
+
+<style>
+    .btn-block {
+        width: 100%;
+    }
+    .ss-main{
+       height: 100%;
+    }
+    .name_p {
+        display: inline;
+        padding-left: 10px;
+    }
+</style>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://unpkg.com/slim-select@latest/dist/slimselect.min.js"></script>
+<link href="https://unpkg.com/slim-select@latest/dist/slimselect.css"
+    rel="stylesheet">
+<script src="https://www.gstatic.com/charts/loader.js"></script>
+<link rel="stylesheet"
+    href="{{ url_for('static',filename='css/main.css') }}">
+
+<script src="{{ url_for('static',filename='js/bootstrap-select.min.js') }}"></script>
+<script src="{{ url_for('static',filename='js/entrust.js') }}"></script>
+
+{% endblock %}

@@ -1,0 +1,111 @@
+{%- set site_title = '虛擬投資系統' -%}
+{%- if has_menu -%}
+{%- set logout_link1 = '<li class="nav-item"><a class="nav-link" href="/logout">登出 <small>('
+            +session['account'].split('@')[0] + ')</small></a></li>' -%}
+{%- set logout_link2 = '<li class="nav-item"><a class="nav-link" href="/logout">登出 <small>(' + session['role_name']
+            +')</small></a></li>' -%}
+{%- endif -%}
+
+<html lang="zh-Hant-TW">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0, shrink-to-fit=no">
+    <meta name="description" content="Python Level 3 Projects">
+    <meta name="author" content="Pyone Zhang">
+    <title>{{ html_title }} | {{ site_title }}</title>
+    <link rel="icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/static/img/apple-touch-icon.png">
+    <link rel="stylesheet" href="/static/bootstrap5/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/bootstrap5/fontawesome.min.css">
+    {%- if has_code %}
+    <link rel="stylesheet" href="/static/bootstrap5/monokai-sublime.min.css">
+    {%- endif %}
+    <link rel="stylesheet" href="/static/css/toastr.min.css">
+    <link rel="stylesheet" href="/static/css/main.css?2208071424">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/klinecharts/dist/klinecharts.min.js"></script>
+    {%- block extra_css %} {% endblock %}
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark navbar-main">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#home-menu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="/">{{ site_title }}</a>
+            <div class="collapse navbar-collapse" id="home-menu">
+                <ul class="navbar-nav me-auto">
+                    {%- if has_home == 1 %}
+                    <li class="nav-item"><a class="nav-link" href="/home">資產總覽</a></li>
+                    {%- endif %}
+                    {%- if session['role_name'] in ('admin','user') %}
+                    {% block menu %}{% endblock menu %}
+                    {%- endif %}
+                </ul>
+                <ul class="navbar-nav navbar-nav-last">
+                    {%- if session['role_name'] in ('admin','user') %}
+                    {{ logout_link1|safe }}
+                    {%- else %}
+                    {{ logout_link2|safe }}
+                    {%- endif %}
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+
+    <div class='thetop'></div>
+    <div id="home" class="jumbotron jumbotron-stock">
+        <div class="container">
+            <h1>{{ en_title }}</h1>
+            <p class="lead">{{ zh_title }}</p>
+        </div>
+    </div>
+    </div>
+    <div class="container">
+        <div class='scrolltop'>
+            <div class='scroll icon'><i class="fa-solid fa-2x fa-angle-up"></i></div>
+        </div>
+        <div style="">
+            {%- if session['role_name'] in ('admin','user') or is_user %}
+            {% block content %}{% endblock %}
+            {%- else %}
+            <h2 class="text-danger mt-5">Permissions Denied!</h2>
+            {%- endif %}
+        </div>
+
+
+    </div>
+    <div style="height:100px"></div>
+    <footer class="footer" style="z-index:99">
+        <p>&copy; {{ cyear }} {{ site_title }} {{ session['role_name'] }}</p>
+    </footer>
+
+
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- SRI Hash Generator: https://www.srihash.org/ -->
+    <script src="{{ url_for('static',filename='js/currency.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='bootstrap5/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='bootstrap5/bootstrap.bundle.min.js') }}"></script>
+    <!-- https://github.com/CodeSeven/toastr -->
+    <script src="{{ url_for('static',filename='js/toastr.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    {%- if has_code %}
+    <script src="{{ url_for('static',filename='js/highlight.min.js') }}"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="{{ url_for('static',filename='js/clipboard.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/precode.js') }}?{{ nowid }}"></script>
+    {%- endif %}
+    <script src="{{ url_for('static',filename='js/shared.js') }}?{{ nowid }}"></script>
+    {%- if session['role_name'] in ('admin','user') or is_user %}
+    {% block extra_js %}{% endblock %}
+    {%- endif %}
+
+</body>
+
+</html>

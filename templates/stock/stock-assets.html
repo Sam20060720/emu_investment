@@ -1,0 +1,80 @@
+{%- extends 'stock/base-stock.html' %}
+{%- set is_user = 1 -%}
+{%- set html_title = '資產總覽' -%}
+{%- set en_title = 'Assets' -%}
+{%- set zh_title = '資產總覽' -%}
+{%- set jumbotron_class = 'jumbotron-stock' -%}
+
+{% block content %}
+<div id="sec00"></div>
+<section class="section-topic">
+    <h3 class="text-primary">{{ zh_title }}
+        <small class="text-muted">{{ en_title }}</small>
+    </h3>
+    <hr>
+    <div id="processing" class="text-center processing">
+        <img src="{{ url_for('static',filename='/img/preloader.gif') }}"
+            alt="preloader">
+    </div>
+    <div id="assets-stat" class="row" style="display: none;">
+        <div class="col-lg-4 mb-3">
+            <div class="ratio ratio-1x1">
+                <div id="piechart"></div>
+            </div>
+        </div>
+        <div class="col-lg-8 mb-3">
+            <table id="tableAssets" class="table table-assets table-sm
+                table-hover">
+                <thead class="table-dark text-center">
+                    <tr>
+                        <th>●</th>
+                        <th>股票名稱<br>Stock</th>
+                        <th>市值<br>Market Value</th>
+                        <th>報酬率<br>ROI</th>
+                        <th>匯率轉換<br>Current</th>
+                    </tr>
+                </thead>
+                <tbody class="text-center">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<div id="sec01" class="section-divider"></div>
+<section class="section-topic">
+    <h3 class="text-primary">證券存摺
+        <small class="text-muted">Passbook</small>
+    </h3>
+    <div class="row btn-block">
+        <div class="col-lg-2 mb-3">
+            <button type="button" id="btnRefresh" class="btn btn-primary">重新整理
+                <span class="spinner-border spinner-border-sm d-none"></span>
+            </button>
+        </div>
+    </div>
+    <hr>
+    <table id="tablePassbook" class="table table-passbook table-sm table-hover
+        table-bordered">
+        <thead class="table-dark text-center">
+            <tr>
+                <th>年月日<br>Date</th>
+                <th>摘要<br>Memo</th>
+                <th>支出<br>Withdrawal</th>
+                <th>存入<br>Deposit</th>
+                <th>餘額<br>Balance</th>
+                <th>備註<br>Remarks</th>
+            </tr>
+        </thead>
+        <tbody class="text-center">
+        </tbody>
+    </table>
+
+    <!-- {{ session['rolename'] }} -->
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://www.gstatic.com/charts/loader.js"></script>
+<script src="{{ url_for('static',filename='js/stock-assets.js') }}?{{ nowid }}"></script>
+{% endblock %}

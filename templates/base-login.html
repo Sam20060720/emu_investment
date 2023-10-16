@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, user-scalable=0, minimum-scale=1, maximum-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Sam20 Command Post">
+    <meta name="author" content="Sam20">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/apple-touch-icon.png') }}">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap5/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap5/fontawesome.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/signin.css') }}?{{ nowid }}">
+    <link rel="canonical" href="https://Sam20.tw/">
+</head>
+
+<body>
+    <div class="signin">
+        {% block content %}{% endblock %}
+        <div class="container text-center">
+            <div class="row">
+                <div class="offset-md-1 col-md-10 links">
+                    <ul>
+                        {% block switch_link %}{% endblock %}
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="offset-md-1 col-md-10 copyright">
+                    &copy; {{ cyear }} Sam07205
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="{{ url_for('static', filename='bootstrap5/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='bootstrap5/bootstrap.bundle.min.js') }}"></script>
+    <!-- https://github.com/emn178/js-sha256 -->
+    <script src="{{ url_for('static', filename='js/sha256.min.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>
